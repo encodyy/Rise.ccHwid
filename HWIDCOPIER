@@ -1,0 +1,26 @@
+--rise.cc winning
+--only synapse and krnl
+
+local http_request = http_request or request or syn.request;
+if syn then
+   http_request = syn.request
+end
+ 
+local body = http_request({Url = 'https://httpbin.org/get'; Method = 'GET'}).Body;
+local decoded = game:GetService('HttpService'):JSONDecode(body)
+local hwid_list = {"Syn-Fingerprint", "Krnl-Hwid", "Fingerprint"};
+local hwid = "";
+ 
+for i, v in next, hwid_list do
+    if decoded.headers[v] then
+        hwid = decoded.headers[v];
+        break
+    end
+end
+ 
+if hwid then
+    setclipboard(hwid)
+    game:GetService("Players").LocalPlayer:Kick('copied hwid to clipboard')
+else
+    game:GetService("Players").LocalPlayer:Kick('unable to get hwid')
+end
